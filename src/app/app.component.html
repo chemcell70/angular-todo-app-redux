@@ -1,0 +1,97 @@
+
+<!doctype html>
+<html lang="en">
+  <head>
+
+    <!-- style css -->
+    <style>
+
+    body{
+
+
+    }
+
+      div{
+        background-color:pink;
+        margin-bottom:5px;
+        padding:5px;
+        border-top: 1px solid black;
+        border-bottom: 1px solid black;
+
+
+      }
+
+    </style>
+
+
+
+    <!-- style css -->
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
+    <title>TODO APP REDUX</title>
+  </head>
+  <body>
+    <h1 class="alert alert-danger" role="alert" align="center">TODO APP REDUX</h1>
+    <h6 class="alert alert-danger" role="alert" align="center">click on the task to remove it</h6>
+    <p  align="center"><input  align="center" id="todo" type="text" style="padding:5px; border-radius:5px;margin:10px; width:250px; height:35px; border:2px solid black;" value="Your Task">
+    <button id="submit-todo" class="btn btn-danger" style="background-color:white; color:red;">SUBMIT+</button></p>
+    <div id="container" style="padding:40px; background-color:white; color:black; font-size:25px;"  align="center"></div>
+
+
+    <!-- Optional JavaScript Library REDUX -->
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/redux/3.7.2/redux.min.js'></script>
+    <script>
+      const reducer = Redux.combineReducers({
+    todos: (state = [], action) => {
+      const newState = Object.assign([], state);
+      if (action.type == 'add') {
+        newState.push(action.item);
+      }
+      if (action.type == 'remove') {
+        newState.splice(action.index, 1);
+      }
+      return newState;
+    }
+  });
+
+  const store = Redux.createStore(reducer);
+
+  const render = () => {
+    const container = document.getElementById('container');
+    container.innerHTML = '';
+    const state = store.getState();
+    state.todos.forEach((todo, i) => {
+      const e = document.createElement('div');
+      e.innerHTML = todo;
+      container.appendChild(e);
+      e.onclick = () => {
+        store.dispatch({
+          type: 'remove',
+          index: i
+        });
+        render();
+      }
+    });
+  };
+
+  document.getElementById('submit-todo').onclick = () => {
+    store.dispatch({
+      type: 'add',
+      item: document.getElementById('todo').value
+    });
+    render();
+  };
+
+  </script>
+
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+  </body>
+</html>
